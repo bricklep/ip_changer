@@ -3,6 +3,8 @@ import socket
 import tkinter as tk
 import wmi
 
+# Refresh current IP at set interval
+UPDATE_RATE = 1000
 
 # Create window using tkinter.
 class IpWindow(tk.Frame):
@@ -25,7 +27,7 @@ class IpWindow(tk.Frame):
 		# create a prompt, an input box, an output label,
 		# and a button to do the computation
 		self.prompt = tk.Label(self, text="Enter an IP Address:", anchor="w")
-		self.entry = tk.Entry(self)
+		self.entry = tk.Entry(self, justify="center")
 		self.current = tk.Label(self, text="")
 		self.submit_ip = tk.Button(self, text="Set IP", command=self.set_ip)
 		self.output = tk.Label(self, text="Format: x.x.x.x")
@@ -33,24 +35,19 @@ class IpWindow(tk.Frame):
 		self.hard_ip_1 = tk.Button(self, text="192.168.0.253", command=self.set_hard_ip_1)
 		self.hard_ip_2 = tk.Button(self, text="192.168.1.253", command=self.set_hard_ip_2)
 		self.current_ip = tk.Label(self,text=f"Current IP is: x")
-		self.refresh_current_ip = tk.Button(self, text="Refresh Current IP", command=self.refresh_ip)
 
 		# lay the widgets out on the screen. 
 		self.prompt.pack(side="top", fill="x")
-		self.entry.pack(side="top", fill="x", padx=20)
+		self.entry.pack(side="top", fill="x", padx=100)
 		self.output.pack(side="top", fill="x", expand=True)
 		self.hard_ip_1.pack(side="bottom", fill="x", padx=50)
 		self.hard_ip_2.pack(side="bottom", fill="x", padx=50, pady=10)
 		self.current_ip.pack(side="bottom", fill="x", padx=30, pady=10)
 		self.submit_ip.pack(side="right", padx=50)
 		self.dhcp.pack(side="left", padx=50)
-		self.refresh_current_ip.pack(side="top", fill="x")
 
-		self.get_current_ip()
-
-	def refresh_ip(self):
-
-		self.get_current_ip()
+		# Start auto updating current IP
+		self.updater()
 
 	def get_current_ip(self):
 
@@ -138,11 +135,16 @@ class IpWindow(tk.Frame):
 			print(f"Device IP Set to {ip}")
 		else:
 			# Draw result to window
-			self.output.configure(text="Device not configurable")
-			print("Device not configurable")
+			self.output.configure(text="Use Format x.x.x.x")
+			print("Use Format x.x.x.x")
 			
 		# If i want to set gateway
 		# self.nic.SetGateways(DefaultIPGateway=[gateway])
+
+	def updater(self):
+		# Refresh current IP at set interval in global variable
+		self.get_current_ip()
+		self.after(UPDATE_RATE, self.updater)
 
 
 # if this is run as a program (versus being imported),
