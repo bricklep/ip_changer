@@ -151,8 +151,11 @@ class IpWindow(tk.Frame):
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("IP address Changer")
+    
+    # Set window size and location
     root.geometry("400x200+1500+800")
     IpWindow(root).pack(fill="both", expand=True)
+
     root.mainloop()
 
 """
