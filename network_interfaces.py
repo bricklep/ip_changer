@@ -16,6 +16,8 @@ class IpWindow(tk.Frame):
 
 		# set nic to main adapter
 		self.nic = nic_configs[0]
+		
+		print(self.nic)
 
 		# How many nics were found with IP enabled
 		num_nics = len(nic_configs)        
@@ -46,12 +48,17 @@ class IpWindow(tk.Frame):
 		self.submit_ip.pack(side="right", padx=50)
 		self.dhcp.pack(side="left", padx=50)
 
+		# Initialize number of refreshes.
+		self.num_refresh = 0
 		# Start auto updating current IP
 		self.updater()
 
 	def get_current_ip(self):
 
-		print("Refreshing Current IP")
+		# Add one to num_refresh per refresh and print number.
+		self.num_refresh += 1
+		print(f"Refreshed current IP {self.num_refresh} times.")
+
 		hostname = socket.gethostname()
 		socket_ip = socket.gethostbyname(hostname)
 		self.current_ip.config(text=f"Device IP set to: {socket_ip}")
