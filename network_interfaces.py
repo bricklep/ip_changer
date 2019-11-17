@@ -14,14 +14,24 @@ class IpWindow(tk.Frame):
 		# Obtain network adaptors configurations
 		nic_configs = wmi.WMI().Win32_NetworkAdapterConfiguration(IPEnabled=True)
 
-		# set nic to main adapter
-		self.nic = nic_configs[0]
-		
-		print(self.nic)
-
-		# How many nics were found with IP enabled
+		# How many nics were found with IP enabled.
 		num_nics = len(nic_configs)        
 		print(f'Number of Nics: {num_nics}')
+
+		# Declare variables for 2 different interfaces
+		self.nic = nic_configs[0]
+		self.nic2 = nic_configs[1]
+
+		# Get Descriptions for each interface
+		self.int_1_desc = self.nic.Description
+		self.int_2_desc = self.nic2.Description
+
+		# Print interface descriptions
+		print(f"Interface 1 is: {self.int_1_desc}")
+		print(f"Interface 2 is: {self.int_2_desc}")
+
+
+		
 
 		c = wmi.WMI()
 		c.Win32_ComputerSystem.methods.keys()
@@ -61,7 +71,7 @@ class IpWindow(tk.Frame):
 
 		hostname = socket.gethostname()
 		socket_ip = socket.gethostbyname(hostname)
-		self.current_ip.config(text=f"Device IP set to: {socket_ip}")
+		self.current_ip.config(text=f"Device IP is currently: {socket_ip}")
 
 
 	def set_hard_ip_1(self):
@@ -70,17 +80,16 @@ class IpWindow(tk.Frame):
 		subnetmask = u'255.255.255.0'
 		gateway = u'192.168.0.1'
 
-		is_ip_configurable = self.nic.EnableStatic(IPAddress=[ip],SubnetMask=[subnetmask])
-		print(is_ip_configurable)
+		#is_ip_configurable = self.nic.EnableStatic(IPAddress=[ip],SubnetMask=[subnetmask])
 
-		if is_ip_configurable == (0,):
-			self.nic.EnableStatic(IPAddress=[ip],SubnetMask=[subnetmask])
-			self.output.configure(text=f"Device IP set to {ip}")
-			print(f"Device IP Set to {ip}")
-		else:
+		#if is_ip_configurable == (0,):
+		self.nic.EnableStatic(IPAddress=[ip],SubnetMask=[subnetmask])
+		self.output.configure(text=f"Device IP set to {ip}")
+		print(f"Device IP Set to {ip}")
+		#else:
 			# Draw result to window
-			self.output.configure(text="Device not configurable")
-			print("Device not configurable")
+			#self.output.configure(text="Device not configurable")
+			#print("Device not configurable")
 
 	def set_hard_ip_2(self):
 
@@ -88,24 +97,22 @@ class IpWindow(tk.Frame):
 		subnetmask = u'255.255.255.0'
 		gateway = u'192.168.1.1'
 
-		is_ip_configurable = self.nic.EnableStatic(IPAddress=[ip],SubnetMask=[subnetmask])
-		print(is_ip_configurable)
+		#is_ip_configurable = self.nic.EnableStatic(IPAddress=[ip],SubnetMask=[subnetmask])
 
-		if is_ip_configurable == (0,):
-			self.nic.EnableStatic(IPAddress=[ip],SubnetMask=[subnetmask])
-			self.output.configure(text=f"Device IP set to {ip}")
-			print(f"Device IP Set to {ip}")
-		else:
+		#if is_ip_configurable == (0,):
+		self.nic.EnableStatic(IPAddress=[ip],SubnetMask=[subnetmask])
+		self.output.configure(text=f"Device IP set to {ip}")
+		print(f"Device IP Set to {ip}")
+		#else:
 			# Draw result to window
-			self.output.configure(text="Device not configurable")
-			print("Device not configurable")
+			#self.output.configure(text="Device not configurable")
+			#print("Device not configurable")
 
 	def set_dhcp(self):
 
 		# Check to see if the interface can be set to dhcp
 		# Return 0 = configurable
 		is_dhcp_configurable = self.nic.EnableDHCP()
-		print(is_dhcp_configurable)
 
 		if is_dhcp_configurable == (0,):
 			# set the interface to dhcp
@@ -132,18 +139,18 @@ class IpWindow(tk.Frame):
 
 		# Set IP address, subnetmask and default gateway
 		# Note: EnableStatic() and SetGateways() methods require *lists* of values to be passed
-		is_ip_configurable = self.nic.EnableStatic(IPAddress=[ip],SubnetMask=[subnetmask])
-		print(is_ip_configurable)
+		#is_ip_configurable = self.nic.EnableStatic(IPAddress=[ip],SubnetMask=[subnetmask])
 
-		if is_ip_configurable == (0,):
-			self.nic.EnableStatic(IPAddress=[ip],SubnetMask=[subnetmask])
-			self.output.configure(text=f"Device IP set to {ip}")
+		#if is_ip_configurable == (0,):
+			#self.nic.ReleaseDHCPLease()
+		self.nic.EnableStatic(IPAddress=[ip],SubnetMask=[subnetmask])
+		self.output.configure(text=f"Device IP set to {ip}")
 
-			print(f"Device IP Set to {ip}")
-		else:
+		print(f"Device IP Set to {ip}")
+		#else:
 			# Draw result to window
-			self.output.configure(text="Use Format x.x.x.x")
-			print("Use Format x.x.x.x")
+			#self.output.configure(text="Use Format x.x.x.x")
+			#print("Use Format x.x.x.x")
 			
 		# If i want to set gateway
 		# self.nic.SetGateways(DefaultIPGateway=[gateway])
