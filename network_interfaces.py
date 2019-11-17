@@ -4,7 +4,7 @@ import wmi
 
 
 # Create window using tkinter.
-class Example(tk.Frame):
+class IpWindow(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
 
@@ -151,7 +151,8 @@ class Example(tk.Frame):
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("IP address Changer")
-    Example(root).pack(fill="both", expand=True)
+    root.geometry("400x200+1500+800")
+    IpWindow(root).pack(fill="both", expand=True)
     root.mainloop()
 
 """
