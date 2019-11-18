@@ -26,15 +26,23 @@ class IpWindow(tk.Frame):
 		self.int_1_desc = self.nic.Description
 		self.int_2_desc = self.nic2.Description
 
+		self.desc_list = [self.int_1_desc, self.int_2_desc]
+
+		print (self.desc_list)
+
 		# Print interface descriptions
 		print(f"Interface 1 is: {self.int_1_desc}")
 		print(f"Interface 2 is: {self.int_2_desc}")
 
-
-		
-
 		c = wmi.WMI()
 		c.Win32_ComputerSystem.methods.keys()
+
+		# Init drop down list.
+		master = tk.Tk()
+		variable = tk.StringVar(master)
+		variable.set(self.desc_list[0])
+		
+
 
 		# create a prompt, an input box, an output label,
 		# and a button to do the computation
@@ -47,6 +55,7 @@ class IpWindow(tk.Frame):
 		self.hard_ip_1 = tk.Button(self, text="192.168.0.253", command=self.set_hard_ip_1)
 		self.hard_ip_2 = tk.Button(self, text="192.168.1.253", command=self.set_hard_ip_2)
 		self.current_ip = tk.Label(self,text=f"Current IP is: x")
+		self.drop_down = tk.OptionMenu(self, master, variable, *self.desc_list)
 
 		# lay the widgets out on the screen. 
 		self.prompt.pack(side="top", fill="x")
@@ -57,11 +66,15 @@ class IpWindow(tk.Frame):
 		self.current_ip.pack(side="bottom", fill="x", padx=30, pady=10)
 		self.submit_ip.pack(side="right", padx=50)
 		self.dhcp.pack(side="left", padx=50)
+		self.drop_down.pack(side="top", fill="x")
 
 		# Initialize number of refreshes.
 		self.num_refresh = 0
 		# Start auto updating current IP
 		self.updater()
+
+	def drop_down(self):
+		pass
 
 	def get_current_ip(self):
 
