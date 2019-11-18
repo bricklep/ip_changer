@@ -38,15 +38,16 @@ class IpWindow(tk.Frame):
 		c.Win32_ComputerSystem.methods.keys()
 
 		# Init drop down list.
-		master = tk.Tk()
-		variable = tk.StringVar(master)
-		variable.set(self.desc_list[0])
+		master = parent
+		self.variable = tk.StringVar(master)
+		# Set interface 0 to be default in list.
+		self.variable.set(self.desc_list[0])
 		
 
 
 		# create a prompt, an input box, an output label,
 		# and a button to do the computation
-		self.prompt = tk.Label(self, text="Enter an IP Address:", anchor="w")
+		self.prompt = tk.Label(self, justify="center", text="Enter an IP Address:")
 		self.entry = tk.Entry(self, justify="center")
 		self.current = tk.Label(self, text="")
 		self.submit_ip = tk.Button(self, text="Set IP", command=self.set_ip)
@@ -55,18 +56,19 @@ class IpWindow(tk.Frame):
 		self.hard_ip_1 = tk.Button(self, text="192.168.0.253", command=self.set_hard_ip_1)
 		self.hard_ip_2 = tk.Button(self, text="192.168.1.253", command=self.set_hard_ip_2)
 		self.current_ip = tk.Label(self,text=f"Current IP is: x")
-		self.drop_down = tk.OptionMenu(self, master, variable, *self.desc_list)
+		self.drop_down = tk.OptionMenu(self, self.variable, *self.desc_list)
 
-		# lay the widgets out on the screen. 
+		# lay the widgets out on the screen.
+		self.drop_down.pack(side="top", fill="x", padx=40)
 		self.prompt.pack(side="top", fill="x")
 		self.entry.pack(side="top", fill="x", padx=100)
 		self.output.pack(side="top", fill="x", expand=True)
-		self.hard_ip_1.pack(side="bottom", fill="x", padx=50)
-		self.hard_ip_2.pack(side="bottom", fill="x", padx=50, pady=10)
+		self.hard_ip_1.pack(side="bottom", fill="x", padx=100)
+		self.hard_ip_2.pack(side="bottom", fill="x", padx=100, pady=10)
 		self.current_ip.pack(side="bottom", fill="x", padx=30, pady=10)
 		self.submit_ip.pack(side="right", padx=50)
 		self.dhcp.pack(side="left", padx=50)
-		self.drop_down.pack(side="top", fill="x")
+		
 
 		# Initialize number of refreshes.
 		self.num_refresh = 0
@@ -184,7 +186,7 @@ if __name__ == "__main__":
 	root.title("IP address Changer")
 	
 	# Set window size and location
-	root.geometry("400x200+1500+800")
+	root.geometry("400x250+1500+750")
 	IpWindow(root).pack(fill="both", expand=True)
 
 	root.mainloop()
